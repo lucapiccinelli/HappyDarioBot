@@ -1,0 +1,23 @@
+﻿{
+  "bindings": [
+    {
+      "type": "httpTrigger",
+      "name": "req",
+      "direction": "in",
+      "webHookType": "genericJson",
+      //"methods": [
+      //  "get"
+      //],
+      "route": "api/banana/HappyDarioBot"
+    }
+
+    //{
+    //  "name": "$return",
+    //  "type": "http",
+    //  "direction": "out"
+    //}
+  ],
+  "disabled": false,
+  "scriptFile": "..\\bin\\HappyDarioBot.dll",
+  "entryPoint": "HappyDarioBot.HappyDarioBot.Run"
+}

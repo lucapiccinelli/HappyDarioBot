@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2027
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HappyDarioBotTests", "HappyDarioBotTests\HappyDarioBotTests.csproj", "{F5A818E2-5DC9-4968-81E0-7C74A79D3557}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HappyDarioBot", "HappyDarioBot\HappyDarioBot.csproj", "{2F256412-11BB-46E1-A6AE-5B2B72F711F4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelegramBotApi", "TelegramBotApi\TelegramBotApi.csproj", "{662FC899-FBCE-47EC-8C89-F14C667DC646}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F5A818E2-5DC9-4968-81E0-7C74A79D3557}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5A818E2-5DC9-4968-81E0-7C74A79D3557}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5A818E2-5DC9-4968-81E0-7C74A79D3557}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5A818E2-5DC9-4968-81E0-7C74A79D3557}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F256412-11BB-46E1-A6AE-5B2B72F711F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F256412-11BB-46E1-A6AE-5B2B72F711F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F256412-11BB-46E1-A6AE-5B2B72F711F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F256412-11BB-46E1-A6AE-5B2B72F711F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{662FC899-FBCE-47EC-8C89-F14C667DC646}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{662FC899-FBCE-47EC-8C89-F14C667DC646}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{662FC899-FBCE-47EC-8C89-F14C667DC646}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{662FC899-FBCE-47EC-8C89-F14C667DC646}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6A51F6D6-0033-402C-A966-1A258399FCA8}
+	EndGlobalSection
+EndGlobal
