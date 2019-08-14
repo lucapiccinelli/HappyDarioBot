@@ -15,7 +15,7 @@ namespace HappyDarioBotTests.Acceptance
     {
         private const String DarioRequest =
             "{\"update_id\":26554013,\r\n\"message\":{\"message_id\":2,\"from\":{\"id\":494523457,\"is_bot\":false,\"first_name\":\"Luca\",\"last_name\":\"Piccinelli\",\"language_code\":\"en\"},\"chat\":{\"id\":494523457,\"first_name\":\"Luca\",\"last_name\":\"Piccinelli\",\"type\":\"private\"},\"date\":1564981439,\"text\":\"banana DarioBot\"}}";
-
+       
         public HappyDarioBotTests()
         {
             
@@ -26,7 +26,7 @@ namespace HappyDarioBotTests.Acceptance
         public async void DarioBotCanReceiveMessagesAndAnswer()
         {
             var request = TestFactory.CreateHttpRequest(HttpMethod.Post, "");
-            var logger = TestFactory.CreateLogger(LoggerTypes.Null);
+            var logger = TestFactory.CreateLogger();
 
             var requestPayload = JsonConvert.DeserializeObject<TelegramUpdate>(DarioRequest);
             request.Content = new ObjectContent<TelegramUpdate>(requestPayload, new JsonMediaTypeFormatter());

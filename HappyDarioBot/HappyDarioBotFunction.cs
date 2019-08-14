@@ -9,7 +9,6 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
-using TelegramBotApi;
 
 namespace HappyDarioBot
 {
@@ -24,9 +23,12 @@ namespace HappyDarioBot
             log.LogDebug(jsonContent);
             TelegramUpdate telegramMsg = JsonConvert.DeserializeObject<TelegramUpdate>(jsonContent);
 
-            var botToken = DarioBotConfiguration.Get("BotToken");
-            TelegramBot telegramApi = new TelegramBot(botToken);
-            await telegramApi.SendMessage(telegramMsg.Message.From.Id, "ciao");
+            string botToken = DarioBotConfiguration.Get(DarioBotConfiguration.BotTokenKey);
+            string toId = DarioBotConfiguration.Get(DarioBotConfiguration.ForwardToIdKey);
+
+            DarioBot darioBot = new DarioBot(botToken, toId);
+            IDarioBotReply reply = darioBot.ReplyBack(telegramMsg);
+            await reply.SendBackReplay();
 
             return req.CreateResponse(HttpStatusCode.OK);
 

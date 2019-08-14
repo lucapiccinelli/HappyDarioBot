@@ -8,6 +8,9 @@ namespace HappyDarioBot
 {
     public static class DarioBotConfiguration
     {
+        public const string BotTokenKey = "BotToken";
+        public const string ForwardToIdKey = "ForwardToId";
+
         public static string Get(string key) => 
             ConfigurationManager.AppSettings[key] 
             ?? Environment.GetEnvironmentVariable(key) 

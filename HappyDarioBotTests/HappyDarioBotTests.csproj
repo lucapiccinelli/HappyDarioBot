@@ -220,6 +220,7 @@
     <Compile Include="NullScope.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestFactory.cs" />
+    <Compile Include="Unit\DarioBotTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -233,6 +234,15 @@
       <Project>{2F256412-11BB-46E1-A6AE-5B2B72F711F4}</Project>
       <Name>HappyDarioBot</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TelegramBotApi\TelegramBotApi.csproj">
+      <Project>{662FC899-FBCE-47EC-8C89-F14C667DC646}</Project>
+      <Name>TelegramBotApi</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Gesù.aac">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
