@@ -33,15 +33,11 @@ namespace TelegramBotApi
                 parse_mode = "HTML"
             });
 
-            IRestResponse<TelegramApiResponse> response = await _telegramBotClient.ExecutePostTaskAsync<TelegramApiResponse>(request);
-            if (response.StatusCode != HttpStatusCode.OK)
-            {
-                throw new TelegramApiException(response);
-            }
+            await SendRequestOrThrow(request);
         }
 
         public async Task SendAudioMessage(int fromId, Stream filestream){
-            RestRequest request = new RestRequest("sendAudio", Method.POST, DataFormat.None);
+            RestRequest request = new RestRequest("sendAudio");
             request.Files.Add(new FileParameter()
             {
                 Name = "audio",
@@ -53,6 +49,11 @@ namespace TelegramBotApi
             request.AddParameter("chat_id", fromId);
             request.AddHeader("ContentType", "application/x-www-form-urlencoded");
 
+            await SendRequestOrThrow(request);
+        }
+
+        private async Task SendRequestOrThrow(RestRequest request)
+        {
             IRestResponse<TelegramApiResponse> response = await _telegramBotClient.ExecutePostTaskAsync<TelegramApiResponse>(request);
             if (response.StatusCode != HttpStatusCode.OK)
             {
