@@ -10,14 +10,16 @@ namespace HappyDarioBot
     {
         private readonly TelegramBot _telegramApi;
         private readonly int _toId;
-        private readonly LocalFileRepository _repository;
+        private readonly IDarioBotRepository _repository;
 
-        public DarioBot(string botToken, string toId)
+        public DarioBot(string botToken, string toId, IDarioBotRepository darioBotRepository)
         {
+            _repository = darioBotRepository;
             _toId = Int32.Parse(toId);
             _telegramApi = new TelegramBot(botToken);
-            _repository = new LocalFileRepository();
         }
+
+        public DarioBot(string botToken, string toId) : this(botToken, toId, new LocalFileRepository()) { }
 
         public IDarioBotReply ReplyBack(TelegramUpdate telegramMsg)
         {

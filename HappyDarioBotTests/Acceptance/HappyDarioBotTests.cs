@@ -31,7 +31,7 @@ namespace HappyDarioBotTests.Acceptance
             var requestPayload = JsonConvert.DeserializeObject<TelegramUpdate>(DarioRequest);
             request.Content = new ObjectContent<TelegramUpdate>(requestPayload, new JsonMediaTypeFormatter());
 
-            var response = await HappyDarioBotFunction.Run(request, logger);
+            var response = await HappyDarioBot.HappyDarioBot.Run(request, logger);
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
     }
