@@ -20,7 +20,7 @@ namespace HappyDarioBotTests.Integration
         public TelegramBotTests()
         {
             _botToken = DarioBotConfiguration.Get(DarioBotConfiguration.BotTokenKey);
-            _resourcesPath = DarioBotConfiguration.Get(DarioBotConfiguration.ResourcesPath);
+            _resourcesPath = DarioBotConfiguration.Get(DarioBotConfiguration.ResourcesPathKey);
             _telegramBot = new TelegramBot(_botToken);
         }
 

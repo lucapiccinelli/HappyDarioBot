@@ -25,10 +25,11 @@ namespace HappyDarioBot
             
             string botToken = DarioBotConfiguration.Get(DarioBotConfiguration.BotTokenKey);
             string toId = DarioBotConfiguration.Get(DarioBotConfiguration.ForwardToIdKey);
-            string resourcesPath = DarioBotConfiguration.Get(DarioBotConfiguration.ResourcesPath);
+            string resourcesPath = DarioBotConfiguration.Get(DarioBotConfiguration.RemoteResourcesPathKey);
+            string azureStorageConnectionString = DarioBotConfiguration.Get(DarioBotConfiguration.StorageConnectionStringKey);
             log.LogInformation($"resourcesPath: {resourcesPath}");
 
-            DarioBot darioBot = new DarioBot(botToken, toId, new LocalFileRepository(resourcesPath));
+            DarioBot darioBot = new DarioBot(botToken, toId, new AzureFileRepository(azureStorageConnectionString, resourcesPath));
             IDarioBotReply reply = darioBot.ReplyBack(telegramMsg);
             await reply.SendBackReplay();
 

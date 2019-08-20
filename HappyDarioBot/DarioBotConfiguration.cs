@@ -10,7 +10,9 @@ namespace HappyDarioBot
     {
         public const string BotTokenKey = "BotToken";
         public const string ForwardToIdKey = "ForwardToId";
-        public const string ResourcesPath = "ResourcesPath";
+        public const string ResourcesPathKey = "ResourcesPath";
+        public const string RemoteResourcesPathKey = "RemoteResourcesPath";
+        public const string StorageConnectionStringKey = "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING";
 
         public static string Get(string key) => 
             ConfigurationManager.AppSettings[key] 

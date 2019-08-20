@@ -143,6 +143,10 @@
     <Reference Include="Microsoft.Win32.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Win32.Primitives.4.3.0\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Storage, Version=7.2.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\HappyDarioBot\bin\Debug\net461\bin\Microsoft.WindowsAzure.Storage.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -252,6 +256,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Acceptance\HappyDarioBotTests.cs" />
+    <Compile Include="Integration\AzureFileRepositoryTests.cs" />
     <Compile Include="Integration\TelegramBotTests.cs" />
     <Compile Include="ListLogger.cs" />
     <Compile Include="LoggerTypes.cs" />
