@@ -16,7 +16,7 @@ namespace HappyDarioBotTests.Integration
             AzureFileRepository fileRepository = new AzureFileRepository(
                 DarioBotConfiguration.Get(DarioBotConfiguration.StorageConnectionStringKey),
                 DarioBotConfiguration.Get(DarioBotConfiguration.RemoteResourcesPathKey));
-            Assert.True(fileRepository.HasAnAudio("Gesù", _ => true, () => false));
+            Assert.True(fileRepository.HasAnAudio("gesu", _ => true, () => false));
         }
 
         [Fact]

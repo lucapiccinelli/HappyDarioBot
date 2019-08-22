@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
+using System.Text;
 using Microsoft.WindowsAzure.Storage;
 
 namespace HappyDarioBot
@@ -15,7 +17,7 @@ namespace HappyDarioBot
             _resourcePath = resourcePath;
         }
 
-        public T HasAnAudio<T>(string messageText, Func<byte[], T> eitherRight, Func<T> eitherLeft)
+        public T HasAnAudio<T>(string name, Func<byte[], T> eitherRight, Func<T> eitherLeft)
         {
             var fileClient = _storageAccount.CreateCloudFileClient();
             var share = fileClient.GetShareReference("happydariobot");
@@ -24,16 +26,26 @@ namespace HappyDarioBot
 
             if (sampleDir.Exists())
             {
-                var fileToDownload = sampleDir.GetFileReference($"{messageText}.aac");
-                if (fileToDownload.Exists())
+                var listFileItems = sampleDir
+                    .ListFilesAndDirectories()
+                    .Select(item => Uri.UnescapeDataString(item.Uri.Segments.Last()))
+                    .ToArray();
+
+                NameMatcher nameMatcher = new NameMatcher(listFileItems);
+                var filename = nameMatcher.Match(name);
+                if(!string.IsNullOrWhiteSpace(filename))
                 {
-                    byte[] fileBytes = null;
-                    using (MemoryStream ms = new MemoryStream())
+                    var fileToDownload = sampleDir.GetFileReference(filename);
+                    if (fileToDownload.Exists())
                     {
-                        fileToDownload.DownloadToStream(ms);
-                        fileBytes = ms.GetBuffer();
+                        byte[] fileBytes = null;
+                        using (MemoryStream ms = new MemoryStream())
+                        {
+                            fileToDownload.DownloadToStream(ms);
+                            fileBytes = ms.GetBuffer();
+                        }
+                        return eitherRight(fileBytes);
                     }
-                    return eitherRight(fileBytes);
                 }
             }
             return eitherLeft();

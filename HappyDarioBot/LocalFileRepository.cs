@@ -12,9 +12,10 @@ namespace HappyDarioBot
             _resourcesPath = resourcesPath;
         }
 
-        public T HasAnAudio<T>(string messageText, Func<byte[], T> eitherRight, Func<T> eitherLeft)
+        public T HasAnAudio<T>(string name, Func<byte[], T> eitherRight, Func<T> eitherLeft)
         {
-            var filename = Path.Combine(_resourcesPath, $"{messageText}.aac");
+            NameMatcher nameMatcher = new NameMatcher(Directory.GetFiles(_resourcesPath));
+            var filename = nameMatcher.Match(name);
             if (File.Exists(filename))
             {
                 var bytes = File.ReadAllBytes(filename);
