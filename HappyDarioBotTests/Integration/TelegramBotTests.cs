@@ -31,6 +31,12 @@ namespace HappyDarioBotTests.Integration
         }
 
         [Fact]
+        public async void CanSend_InlineKeyobord()
+        {
+            await _telegramBot.SendInlineKeyboard(MyId, "Luca");
+        }
+
+        [Fact]
         public async void CanSend_Audio()
         {
             var filename = "Gesù.aac";

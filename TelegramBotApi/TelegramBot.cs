@@ -35,6 +35,33 @@ namespace TelegramBotApi
 
             await SendRequestOrThrow(request);
         }
+        public async Task SendInlineKeyboard(int fromId, string message)
+        {
+            RestRequest request = new RestRequest("sendMessage");
+            request.AddJsonBody(new 
+            {
+                chat_id = fromId,
+                text = message,
+                parse_mode = "HTML",
+                reply_markup = new 
+                {
+                    inline_keyboard = new[]
+                    {
+                        new []
+                        {
+                            new
+                            {
+                                text = message,
+                                callback_data = $"/set {message}"
+                            }
+
+                        }
+                    }
+                }
+            });
+
+            await SendRequestOrThrow(request);
+        }
 
         public async Task SendAudioMessage(int fromId, Stream filestream){
             RestRequest request = new RestRequest("sendAudio");
