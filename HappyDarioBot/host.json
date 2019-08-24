@@ -1,2 +1,12 @@
 {
+  "logger": {
+    "categoryFilter": {
+      "defaultLevel": "Debug",
+      "categoryLevels": {
+        "Host.Results": "Debug",
+        "Function": "Debug",
+        "Host.Aggregator": "Debug"
+      }
+    }
+  }
 }

@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.File;
 
 namespace HappyDarioBot
 {
@@ -19,36 +20,53 @@ namespace HappyDarioBot
 
         public T HasAnAudio<T>(string name, Func<byte[], T> eitherRight, Func<T> eitherLeft)
         {
-            var fileClient = _storageAccount.CreateCloudFileClient();
-            var share = fileClient.GetShareReference("happydariobot");
-            var rootDir = share.GetRootDirectoryReference();
-            var sampleDir = rootDir.GetDirectoryReference(_resourcePath);
+            var audioFilesDir = GetAudioFileDirectory();
 
-            if (sampleDir.Exists())
+            if (audioFilesDir.Exists())
             {
-                var listFileItems = sampleDir
-                    .ListFilesAndDirectories()
-                    .Select(item => Uri.UnescapeDataString(item.Uri.Segments.Last()))
-                    .ToArray();
+                var allTheFiles = ListAllTheFiles(audioFilesDir);
 
-                NameMatcher nameMatcher = new NameMatcher(listFileItems);
+                NameMatcher nameMatcher = new NameMatcher(allTheFiles);
                 var filename = nameMatcher.Match(name);
                 if(!string.IsNullOrWhiteSpace(filename))
                 {
-                    var fileToDownload = sampleDir.GetFileReference(filename);
+                    var fileToDownload = audioFilesDir.GetFileReference(filename);
                     if (fileToDownload.Exists())
                     {
-                        byte[] fileBytes = null;
-                        using (MemoryStream ms = new MemoryStream())
-                        {
-                            fileToDownload.DownloadToStream(ms);
-                            fileBytes = ms.GetBuffer();
-                        }
-                        return eitherRight(fileBytes);
+                        return DownloadTheAudio(eitherRight, fileToDownload);
                     }
                 }
             }
             return eitherLeft();
+        }
+
+        private static T DownloadTheAudio<T>(Func<byte[], T> eitherRight, CloudFile fileToDownload)
+        {
+            byte[] fileBytes = null;
+            using (MemoryStream ms = new MemoryStream())
+            {
+                fileToDownload.DownloadToStream(ms);
+                fileBytes = ms.GetBuffer();
+            }
+
+            return eitherRight(fileBytes);
+        }
+
+        private static string[] ListAllTheFiles(CloudFileDirectory audioFilesDir)
+        {
+            return audioFilesDir
+                .ListFilesAndDirectories()
+                .Select(item => Uri.UnescapeDataString(item.Uri.Segments.Last()))
+                .ToArray();
+        }
+
+        private CloudFileDirectory GetAudioFileDirectory()
+        {
+            var fileClient = _storageAccount.CreateCloudFileClient();
+            var share = fileClient.GetShareReference("happydariobot");
+            var rootDir = share.GetRootDirectoryReference();
+            var sampleDir = rootDir.GetDirectoryReference(_resourcePath);
+            return sampleDir;
         }
     }
 }

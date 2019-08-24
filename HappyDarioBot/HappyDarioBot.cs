@@ -20,7 +20,7 @@ namespace HappyDarioBot
             log.LogInformation("DarioBot was triggered!");
 
             string jsonContent = await req.Content.ReadAsStringAsync();
-            log.LogDebug(jsonContent);
+            log.LogInformation(jsonContent);
             TelegramUpdate telegramMsg = JsonConvert.DeserializeObject<TelegramUpdate>(jsonContent);
             
             string botToken = DarioBotConfiguration.Get(DarioBotConfiguration.BotTokenKey);
@@ -28,6 +28,11 @@ namespace HappyDarioBot
             string resourcesPath = DarioBotConfiguration.Get(DarioBotConfiguration.RemoteResourcesPathKey);
             string azureStorageConnectionString = DarioBotConfiguration.Get(DarioBotConfiguration.StorageConnectionStringKey);
             log.LogInformation($"resourcesPath: {resourcesPath}");
+
+            if(telegramMsg.Message.Text == null)
+            {
+                return req.CreateResponse(HttpStatusCode.Accepted);
+            }
 
             DarioBot darioBot = new DarioBot(botToken, toId, new AzureFileRepository(azureStorageConnectionString, resourcesPath));
             IDarioBotReply reply = darioBot.ReplyBack(telegramMsg);
