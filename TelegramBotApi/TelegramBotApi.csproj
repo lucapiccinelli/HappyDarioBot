@@ -84,6 +84,7 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>SolutionInfo.cs</Link>
     </Compile>
+    <Compile Include="TelegramBotConstants.cs" />
     <Compile Include="DarioBotReplyEnum.cs" />
     <Compile Include="Dto\TelegramApiResponse.cs" />
     <Compile Include="Exception\TelegramApiException.cs" />

@@ -29,9 +29,9 @@ namespace HappyDarioBot
             string azureStorageConnectionString = DarioBotConfiguration.Get(DarioBotConfiguration.StorageConnectionStringKey);
             log.LogInformation($"resourcesPath: {resourcesPath}");
 
-            if(telegramMsg.Message.Text == null)
+            if(telegramMsg?.Message?.Text == null && telegramMsg?.CallbackQuery?.Data == null)
             {
-                return req.CreateResponse(HttpStatusCode.Accepted);
+                return req.CreateResponse(HttpStatusCode.OK);
             }
 
             DarioBot darioBot = new DarioBot(botToken, toId, new AzureFileRepository(azureStorageConnectionString, resourcesPath));
@@ -39,20 +39,6 @@ namespace HappyDarioBot
             await reply.SendBackReplay();
 
             return req.CreateResponse(HttpStatusCode.OK);
-
-
-            //if (data.first == null || data.last == null)
-            //{
-            //    return req.CreateResponse(HttpStatusCode.BadRequest, new
-            //    {
-            //        error = "Please pass first/last properties in the input object"
-            //    });
-            //}
-
-            //return req.CreateResponse(HttpStatusCode.OK, new
-            //{
-            //    greeting = $"Hello {data.first} {data.last}!"
-            //});
         }
     }
 }

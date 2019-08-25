@@ -52,7 +52,7 @@ namespace TelegramBotApi
                             new
                             {
                                 text = message,
-                                callback_data = $"/set {message}"
+                                callback_data = $"{TelegramBotConstants.SetNameCommand} {message}"
                             }
 
                         }

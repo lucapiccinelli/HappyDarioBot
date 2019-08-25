@@ -1,0 +1,7 @@
+﻿namespace TelegramBotApi
+{
+    public class TelegramBotConstants
+    {
+        public const string SetNameCommand = "/setname";
+    }
+}

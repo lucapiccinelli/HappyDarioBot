@@ -4,5 +4,7 @@ namespace HappyDarioBot
     {
         void Use(ForwardDarioBotReply reply);
         void Use(AudioDarioBotReply reply);
+        void Use(SetNameDarioBotResponse reply);
+        void Use(PrivateCommandDarioBotResponse reply);
     }
 }

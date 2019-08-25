@@ -3,6 +3,8 @@
     public enum DarioBotReplyEnum
     {
         Audio,
-        Forwarded
+        Forwarded,
+        Ok,
+        Ko
     }
 }
