@@ -5,6 +5,8 @@
         Audio,
         Forwarded,
         Ok,
-        Ko
+        Ko,
+        UnknownCommand,
+        BadCommand
     }
 }

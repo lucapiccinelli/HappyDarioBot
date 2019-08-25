@@ -44,7 +44,24 @@ namespace HappyDarioBot
                 return new PrivateCommandDarioBotResponse();
             }
 
-            return new SetNameDarioBotResponse(callbackQuery.Data.Split(' ').Skip(1).First());
+            var commandTokens = callbackQuery.Data.Split(' ');
+            if (commandTokens.Length != 2)
+            {
+                return new BadCommandFormat($"Expected at least 1 command and 1 argument. Received: {callbackQuery.Data}");
+            }
+            if (!commandTokens.First().StartsWith("/"))
+            {
+                return new BadCommandFormat($"Not a command. A command should start with: {callbackQuery.Data}");
+            }
+
+            string command = commandTokens.First();
+            string[] args = commandTokens.Skip(1).ToArray();
+            if (command != TelegramBotConstants.SetNameCommand)
+            {
+                return new UnknownCommand($"Not a known command: {callbackQuery.Data}");
+            }
+
+            return new SetNameDarioBotResponse(args.First());
         }
 
         private IDarioBotReply ReplyFor(TelegramUpdate telegramMsg, string messageText)

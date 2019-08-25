@@ -103,6 +103,28 @@ namespace HappyDarioBotTests.Unit
             Assert.Equal(DarioBotReplyEnum.Ko, reply.Type);
         }
 
+        [Theory]
+        [InlineData("/unknown command", DarioBotReplyEnum.UnknownCommand)]
+        [InlineData("/unknown", DarioBotReplyEnum.BadCommand)]
+        [InlineData("unknown command", DarioBotReplyEnum.BadCommand)]
+        [InlineData("unknown", DarioBotReplyEnum.BadCommand)]
+        public void DarioBot_AnswersKo_IfCallBackCommand_IsUnknown(string command, DarioBotReplyEnum expectedReply)
+        {
+            IDarioBotReply reply = _darioBot.ReplyBack(new TelegramUpdate
+            {
+                CallbackQuery = new TelegramCallbackQuery()
+                {
+                    From = new TelegramFrom()
+                    {
+                        Id = MyId
+                    },
+                    Data = command
+                }
+            });
+
+            Assert.Equal(expectedReply, reply.Type);
+        }
+
         public void Use(ForwardDarioBotReply reply)
         {
             Assert.Equal(MyId, reply.FromId);
@@ -116,6 +138,16 @@ namespace HappyDarioBotTests.Unit
         }
 
         public void Use(PrivateCommandDarioBotResponse reply)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Use(BadCommandFormat reply)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Use(UnknownCommand reply)
         {
             throw new NotImplementedException();
         }
