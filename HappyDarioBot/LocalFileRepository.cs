@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace HappyDarioBot
 {
@@ -12,17 +13,22 @@ namespace HappyDarioBot
             _resourcesPath = resourcesPath;
         }
 
-        public T HasAnAudio<T>(string name, Func<byte[], T> eitherRight, Func<T> eitherLeft)
+        public T HasAnAudio<T>(string name, Func<byte[], T> onSuccess, Func<T> onError)
         {
             NameMatcher nameMatcher = new NameMatcher(Directory.GetFiles(_resourcesPath));
             var filename = nameMatcher.Match(name);
             if (File.Exists(filename))
             {
                 var bytes = File.ReadAllBytes(filename);
-                return eitherRight(bytes);
+                return onSuccess(bytes);
             }
 
-            return eitherLeft();
+            return onError();
+        }
+
+        public Task SetCurrentAudioName(string name, Action onSuccess, Action<RepositoryError> onError)
+        {
+            throw new NotImplementedException();
         }
     }
 }

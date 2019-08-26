@@ -142,7 +142,7 @@ namespace HappyDarioBotTests.Unit
             throw new NotImplementedException();
         }
 
-        public void Use(BadCommandFormat reply)
+        public void Use(BadCommandFormatResponse reply)
         {
             throw new NotImplementedException();
         }

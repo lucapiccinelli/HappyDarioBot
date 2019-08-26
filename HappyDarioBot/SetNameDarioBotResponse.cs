@@ -1,13 +1,21 @@
 using System;
 using System.Threading.Tasks;
+using HappyDarioBot.Dto.Webhook.In;
 using TelegramBotApi;
 
 namespace HappyDarioBot
 {
     public class SetNameDarioBotResponse : IDarioBotReply
     {
-        public SetNameDarioBotResponse(string name)
+        private readonly TelegramBot _telegramApi;
+        private readonly IDarioBotRepository _repository;
+        private readonly TelegramCallbackQuery _callbackQuery;
+
+        public SetNameDarioBotResponse(TelegramBot telegramApi, IDarioBotRepository repository, TelegramCallbackQuery callbackQuery, string name)
         {
+            _telegramApi = telegramApi;
+            _repository = repository;
+            _callbackQuery = callbackQuery;
             Name = name;
         }
 
@@ -20,9 +28,11 @@ namespace HappyDarioBot
             consumer.Use(this);
         }
 
-        public Task SendBackReplay()
+        public async Task SendBackReplay()
         {
-            throw new NotImplementedException();
+            await _repository.SetCurrentAudioName(Name, 
+                async () => await _telegramApi.SendMessage(_callbackQuery.From.Id, "ok"),
+                async error => await _telegramApi.SendMessage(_callbackQuery.From.Id, error.Message));
         }
     }
 }

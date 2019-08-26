@@ -10,22 +10,48 @@ namespace HappyDarioBotTests.Integration
 {
     public class AzureFileRepositoryTests
     {
+        private readonly AzureFileRepository _azureFileRepository;
+        private readonly AzureFileRepository _badAzureFileRepository;
+
+        public AzureFileRepositoryTests()
+        {
+            _azureFileRepository = new AzureFileRepository(
+                DarioBotConfiguration.Get(DarioBotConfiguration.StorageConnectionStringKey),
+                DarioBotConfiguration.Get(DarioBotConfiguration.RemoteResourcesPathKey),
+                "happydariobottests");
+
+            _badAzureFileRepository = new AzureFileRepository(
+                "x",
+                DarioBotConfiguration.Get(DarioBotConfiguration.RemoteResourcesPathKey),
+                "xasxsaxsa");
+        }
+
         [Fact]
         public void CanRetrieve_File_FromCloud()
         {
-            AzureFileRepository fileRepository = new AzureFileRepository(
-                DarioBotConfiguration.Get(DarioBotConfiguration.StorageConnectionStringKey),
-                DarioBotConfiguration.Get(DarioBotConfiguration.RemoteResourcesPathKey));
-            Assert.True(fileRepository.HasAnAudio("gesu", _ => true, () => false));
+            Assert.True(_azureFileRepository.HasAnAudio("gesu", _ => true, () => false));
         }
 
         [Fact]
         public void IfFile_DoesNotExists_ReturnFalse()
         {
-            AzureFileRepository fileRepository = new AzureFileRepository(
-                DarioBotConfiguration.Get(DarioBotConfiguration.StorageConnectionStringKey),
-                DarioBotConfiguration.Get(DarioBotConfiguration.RemoteResourcesPathKey));
-            Assert.False(fileRepository.HasAnAudio("xaiuydeew", _ => true, () => false));
+            Assert.False(_azureFileRepository.HasAnAudio("xaiuydeew", _ => true, () => false));
+        }
+
+        [Fact]
+        public async void CanSet_AName()
+        {
+            bool result = false;
+            await _azureFileRepository.SetCurrentAudioName("Luca", () => result = true, _ => result = false); 
+            Assert.True(result);
+        }
+
+        [Fact]
+        public async void OnError_ItReturns_AMessage()
+        {
+            string message = "";
+            await _badAzureFileRepository.SetCurrentAudioName("Luca", () => message = "", error => message = error.Message); 
+            Assert.NotEmpty(message);
         }
     }
 }

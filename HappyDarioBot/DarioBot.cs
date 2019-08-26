@@ -39,29 +39,40 @@ namespace HappyDarioBot
 
         private IDarioBotReply ReplyFor(TelegramCallbackQuery callbackQuery)
         {
-            if (callbackQuery.From.Id != _forwardId)
-            {
-                return new PrivateCommandDarioBotResponse();
-            }
-
-            var commandTokens = callbackQuery.Data.Split(' ');
+            string[] commandTokens = GetCommandTokens(callbackQuery);
             if (commandTokens.Length != 2)
             {
-                return new BadCommandFormat($"Expected at least 1 command and 1 argument. Received: {callbackQuery.Data}");
-            }
-            if (!commandTokens.First().StartsWith("/"))
-            {
-                return new BadCommandFormat($"Not a command. A command should start with: {callbackQuery.Data}");
+                return new BadCommandFormatResponse(callbackQuery, _telegramApi, $"Expected at least 1 command and 1 argument. Received: {callbackQuery.Data}");
             }
 
-            string command = commandTokens.First();
+            string theCommand = commandTokens.First();
+            if (!theCommand.StartsWith("/"))
+            {
+                return new BadCommandFormatResponse(callbackQuery, _telegramApi, $"Not a command. A command should start with: {callbackQuery.Data}");
+            }
+
             string[] args = commandTokens.Skip(1).ToArray();
-            if (command != TelegramBotConstants.SetNameCommand)
+            return GetTheCommand(callbackQuery, theCommand, args);
+        }
+
+        private static string[] GetCommandTokens(TelegramCallbackQuery callbackQuery)
+        {
+            return callbackQuery.Data.Split(' ');
+        }
+
+        private IDarioBotReply GetTheCommand(TelegramCallbackQuery callbackQuery, string command, string[] args)
+        {
+            if (command == TelegramBotConstants.SetNameCommand)
             {
-                return new UnknownCommand($"Not a known command: {callbackQuery.Data}");
+                if (callbackQuery.From.Id != _forwardId)
+                {
+                    return new PrivateCommandDarioBotResponse(callbackQuery, _telegramApi);
+                }
+
+                return new SetNameDarioBotResponse(_telegramApi, _repository, callbackQuery, args.First());
             }
 
-            return new SetNameDarioBotResponse(args.First());
+            return new UnknownCommand($"Not a known command: {callbackQuery.Data}");
         }
 
         private IDarioBotReply ReplyFor(TelegramUpdate telegramMsg, string messageText)
