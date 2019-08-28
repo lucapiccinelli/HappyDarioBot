@@ -13,6 +13,7 @@ namespace HappyDarioBot
         public const string ResourcesPathKey = "ResourcesPath";
         public const string RemoteResourcesPathKey = "RemoteResourcesPath";
         public const string StorageConnectionStringKey = "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING";
+        public const string AzureStorageNameKey = "AzureStorageName";
 
         public static string Get(string key) => 
             ConfigurationManager.AppSettings[key] 

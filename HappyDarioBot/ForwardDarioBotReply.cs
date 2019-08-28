@@ -37,8 +37,7 @@ namespace HappyDarioBot
         public async Task SendBackReplay()
         {
             await _telegramApi.SendMessage(FromId, FromReplyMessage);
-            await _telegramApi.SendMessage(ForwardedToId, ToReplyMessage);
-            await _telegramApi.SendInlineKeyboard(ForwardedToId, Name);
+            await _telegramApi.SendInlineKeyboard(ForwardedToId, ToReplyMessage, Name);
         }
     }
 }

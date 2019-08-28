@@ -33,7 +33,7 @@ namespace HappyDarioBotTests.Integration
         [Fact]
         public async void CanSend_InlineKeyobord()
         {
-            await _telegramBot.SendInlineKeyboard(MyId, "Luca");
+            await _telegramBot.SendInlineKeyboard(MyId, "ciao!", "Luca");
         }
 
         [Fact]
@@ -64,6 +64,22 @@ namespace HappyDarioBotTests.Integration
         public async void WithAnError_ItThrows_AnException()
         {
             await Assert.ThrowsAsync<TelegramApiException>(() => _telegramBot.SendMessage(0, "ciao!"));
+        }
+
+        [Fact]
+        public async void CanDownload_AFile()
+        {
+            byte[] audioBytes = File.ReadAllBytes(Path.Combine(_resourcesPath, "Audio.mp3"));
+
+            byte[] downloadedBytes = await _telegramBot.Download("AwADBAADbQYAAtQHAVMH6C2nlJBQnRYE");
+            Assert.Equal(audioBytes, downloadedBytes);
+        }
+
+        [Fact]
+        public async void IfFile_DoesNotExists_ItRaisesAnError()
+        {
+
+            await Assert.ThrowsAsync<TelegramApiException>(() => _telegramBot.Download("notExists"));
         }
     }
 }

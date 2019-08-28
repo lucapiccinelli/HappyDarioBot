@@ -13,20 +13,25 @@ namespace HappyDarioBot
             _resourcesPath = resourcesPath;
         }
 
-        public T HasAnAudio<T>(string name, Func<byte[], T> onSuccess, Func<T> onError)
+        public T HasAnAudio<T>(string name, Func<byte[], T> onExists, Func<T> onNotExists)
         {
             NameMatcher nameMatcher = new NameMatcher(Directory.GetFiles(_resourcesPath));
             var filename = nameMatcher.Match(name);
             if (File.Exists(filename))
             {
                 var bytes = File.ReadAllBytes(filename);
-                return onSuccess(bytes);
+                return onExists(bytes);
             }
 
-            return onError();
+            return onNotExists();
         }
 
-        public Task SetCurrentAudioName(string name, Action onSuccess, Action<RepositoryError> onError)
+        public void SetCurrentAudioName(string name, Action onSuccess, Action<RepositoryError> onError)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Save(byte[] uploadedFile, Action<string> onSuccess, Action<RepositoryError> onError)
         {
             throw new NotImplementedException();
         }

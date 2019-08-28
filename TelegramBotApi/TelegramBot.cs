@@ -16,11 +16,13 @@ namespace TelegramBotApi
     {
         private readonly string _botToken;
         private readonly RestClient _telegramBotClient;
+        private readonly RestClient _telegramBotFileClient;
 
         public TelegramBot(string botToken)
         {
             _botToken = botToken;
             _telegramBotClient = new RestClient($"https://api.telegram.org/bot{_botToken}");
+            _telegramBotFileClient = new RestClient($"https://api.telegram.org/file/bot{_botToken}");
         }
 
         public async Task SendMessage(int fromId, string message)
@@ -35,7 +37,7 @@ namespace TelegramBotApi
 
             await SendRequestOrThrow(request);
         }
-        public async Task SendInlineKeyboard(int fromId, string message)
+        public async Task SendInlineKeyboard(int fromId, string message, string buttonText)
         {
             RestRequest request = new RestRequest("sendMessage");
             request.AddJsonBody(new 
@@ -51,8 +53,8 @@ namespace TelegramBotApi
                         {
                             new
                             {
-                                text = message,
-                                callback_data = $"{TelegramBotConstants.SetNameCommand} {message}"
+                                text = buttonText,
+                                callback_data = $"{TelegramBotConstants.SetNameCommand} {buttonText}"
                             }
 
                         }
@@ -79,13 +81,32 @@ namespace TelegramBotApi
             await SendRequestOrThrow(request);
         }
 
-        private async Task SendRequestOrThrow(RestRequest request)
+        public async Task<byte[]> Download(string fileId)
         {
-            IRestResponse<TelegramApiResponse> response = await _telegramBotClient.ExecutePostTaskAsync<TelegramApiResponse>(request);
+            RestRequest request = new RestRequest("getFile");
+            request.AddParameter("file_id", fileId);
+            request.AddHeader("ContentType", "application/x-www-form-urlencoded");
+
+            IRestResponse<TelegramApiResponse> response = await SendRequestOrThrow(request);
+
+            request = new RestRequest(response.Data.Result.FilePath, Method.GET);
+            return (await _telegramBotFileClient.ExecuteTaskAsync(request)).RawBytes;
+        }
+
+        private async Task<IRestResponse<TelegramApiResponse>> SendRequestOrThrow(RestRequest request, Method httpMethod = Method.POST)
+        {
+            return await SendRequestOrThrow(request, _telegramBotClient, httpMethod);
+        }
+
+        private async Task<IRestResponse<TelegramApiResponse>> SendRequestOrThrow(RestRequest request, RestClient client, Method httpMethod = Method.POST)
+        {
+            IRestResponse<TelegramApiResponse> response = await _telegramBotClient.ExecuteTaskAsync<TelegramApiResponse>(request, httpMethod);
             if (response.StatusCode != HttpStatusCode.OK)
             {
                 throw new TelegramApiException(response);
             }
+
+            return response;
         }
     }
 }

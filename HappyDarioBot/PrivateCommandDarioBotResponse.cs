@@ -7,12 +7,12 @@ namespace HappyDarioBot
 {
     public class PrivateCommandDarioBotResponse : IDarioBotReply
     {
-        private readonly TelegramCallbackQuery _callbackQuery;
+        private readonly TelegramFrom _from;
         private readonly TelegramBot _telegramApi;
 
-        public PrivateCommandDarioBotResponse(TelegramCallbackQuery callbackQuery, TelegramBot telegramApi)
+        public PrivateCommandDarioBotResponse(TelegramFrom @from, TelegramBot telegramApi)
         {
-            _callbackQuery = callbackQuery;
+            _from = @from;
             _telegramApi = telegramApi;
         }
 
@@ -24,7 +24,7 @@ namespace HappyDarioBot
 
         public async Task SendBackReplay()
         {
-            await _telegramApi.SendMessage(_callbackQuery.From.Id, "No!");
+            await _telegramApi.SendMessage(_from.Id, "No!");
         }
     }
 }

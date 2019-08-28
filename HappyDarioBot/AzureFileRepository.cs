@@ -11,6 +11,9 @@ namespace HappyDarioBot
 {
     public class AzureFileRepository : IDarioBotRepository
     {
+        private const string CurrentnameFile = "currentname";
+
+
         private readonly string _connectionString;
         private readonly string _resourcePath;
         private readonly string _repositoryReference;
@@ -22,7 +25,7 @@ namespace HappyDarioBot
             _repositoryReference = repositoryReference;
         }
 
-        public T HasAnAudio<T>(string name, Func<byte[], T> onSuccess, Func<T> onError)
+        public T HasAnAudio<T>(string name, Func<byte[], T> onExists, Func<T> onNotExists)
         {
             var audioFilesDir = GetAudioFileDirectory();
 
@@ -37,32 +40,60 @@ namespace HappyDarioBot
                     var fileToDownload = audioFilesDir.GetFileReference(filename);
                     if (fileToDownload.Exists())
                     {
-                        return DownloadTheAudio(onSuccess, fileToDownload);
+                        return DownloadTheAudio(onExists, fileToDownload);
                     }
                 }
             }
-            return onError();
+            return onNotExists();
         }
 
-        public async Task SetCurrentAudioName(string name, Action onSuccess, Action<RepositoryError> onError)
+        public void SetCurrentAudioName(string name, Action onSuccess, Action<RepositoryError> onError)
         {
-            try
+            Try(() =>
             {
                 CloudBlobContainer container = GetContainer();
                 container.CreateIfNotExists(BlobContainerPublicAccessType.Off);
-                CloudBlockBlob blob = container.GetBlockBlobReference("currentname");
+                CloudBlockBlob blob = container.GetBlockBlobReference(CurrentnameFile);
 
-                await blob.UploadTextAsync(name);
+                blob.UploadText(name);
                 onSuccess();
+            }, onError);
+        }
+
+        public void Save(byte[] uploadedFile, Action<string> onSuccess, Action<RepositoryError> onError)
+        {
+            Try(() =>
+            {
+                string saveFilename = $"{GetFilename()}.mp3";
+
+                var audioDirectory = GetAudioFileDirectory();
+                var fileReference = audioDirectory.GetFileReference(saveFilename);
+                fileReference.UploadFromByteArray(uploadedFile, 0, uploadedFile.Length);
+
+                onSuccess(saveFilename);
+            }, onError);
+        }
+        public void Try(Action action, Action<RepositoryError> onError)
+        {
+            try
+            {
+                action();
             }
             catch (Exception e)
             {
-                onError(new RepositoryError
+                onError(new RepositoryError()
                 {
                     Message = e.Message,
                     Exception = e
                 });
             }
+        }
+
+        private string GetFilename()
+        {
+            var container = GetContainer();
+            var currentname = container.GetBlockBlobReference(CurrentnameFile);
+            return currentname.DownloadText();
         }
 
         public async Task Clean()

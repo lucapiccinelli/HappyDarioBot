@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HappyDarioBot;
+using HappyDarioBot.Dto;
 using HappyDarioBot.Dto.Webhook.In;
 using TelegramBotApi;
 using Xunit;
@@ -14,8 +15,10 @@ namespace HappyDarioBotTests.Unit
     {
         private readonly DarioBot _darioBot;
         private readonly string _forwardedId;
+        private readonly TelegramVoice _telegramVoiceExample;
         private const int MyId = 494523457;
         private const string MyName = "Luca";
+        private const int UnknownId = 1235456789;
 
 
         public DarioBotTests()
@@ -24,6 +27,13 @@ namespace HappyDarioBotTests.Unit
                 DarioBotConfiguration.Get(DarioBotConfiguration.BotTokenKey),
                 DarioBotConfiguration.Get(DarioBotConfiguration.ForwardToIdKey));
             _forwardedId = DarioBotConfiguration.Get(DarioBotConfiguration.ForwardToIdKey);
+
+            _telegramVoiceExample = new TelegramVoice()
+            {
+                fileId = "AwADBAADbQYAAtQHAVMH6C2nlJBQnRYE",
+                file_size = 27277,
+                duration = 3
+            };
         }
 
         [Fact]
@@ -83,6 +93,25 @@ namespace HappyDarioBotTests.Unit
             Assert.Equal(DarioBotReplyEnum.Ok, reply.Type);
             reply.ApplyTo(this);
         }
+        [Fact]
+        public void DarioBot_AnswersOk_IfForwardId_Asks_ToSet_AName_FromAMessage()
+        {
+            IDarioBotReply reply = _darioBot.ReplyBack(new TelegramUpdate
+            {
+                Message = new TelegramMessage()
+                {
+                    From = new TelegramFrom()
+                    {
+                        Id = MyId
+                    },
+                    Text = $"{TelegramBotConstants.SetNameCommand} {MyName}"
+                }
+            });
+
+
+            Assert.Equal(DarioBotReplyEnum.Ok, reply.Type);
+            reply.ApplyTo(this);
+        }
 
         [Fact]
         public void DarioBot_AnswersKo_AnUnknowId_Asks_ToSet_AName_FromACallback()
@@ -93,7 +122,7 @@ namespace HappyDarioBotTests.Unit
                 {
                     From = new TelegramFrom()
                     {
-                        Id = 123456789
+                        Id = UnknownId
                     },
                     Data = $"{TelegramBotConstants.SetNameCommand} {MyName}"
                 }
@@ -125,6 +154,42 @@ namespace HappyDarioBotTests.Unit
             Assert.Equal(expectedReply, reply.Type);
         }
 
+        [Fact]
+        public void DarioBot_AnswersOk_WhenAudio_IsUploaded()
+        {
+            IDarioBotReply reply = _darioBot.ReplyBack(new TelegramUpdate
+            {
+                Message = new TelegramMessage
+                {
+                    From = new TelegramFrom()
+                    {
+                        Id = MyId
+                    },
+                    Voice = _telegramVoiceExample
+                }
+            });
+
+            Assert.Equal(DarioBotReplyEnum.Ok, reply.Type);
+        }
+
+        [Fact]
+        public void DarioBot_AnswersKo_WhenAudio_IsUploaded_ByAnUnknownId()
+        {
+            IDarioBotReply reply = _darioBot.ReplyBack(new TelegramUpdate
+            {
+                Message = new TelegramMessage
+                {
+                    From = new TelegramFrom()
+                    {
+                        Id = UnknownId
+                    },
+                    Voice = _telegramVoiceExample
+                }
+            });
+
+            Assert.Equal(DarioBotReplyEnum.Ko, reply.Type);
+        }
+
         public void Use(ForwardDarioBotReply reply)
         {
             Assert.Equal(MyId, reply.FromId);
@@ -148,6 +213,11 @@ namespace HappyDarioBotTests.Unit
         }
 
         public void Use(UnknownCommand reply)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Use(AudioUploadDarioBotReply reply)
         {
             throw new NotImplementedException();
         }

@@ -7,13 +7,13 @@ namespace HappyDarioBot
 {
     public class BadCommandFormatResponse : IDarioBotReply
     {
-        private readonly TelegramCallbackQuery _callbackQuery;
+        private readonly TelegramFrom _from;
         private readonly TelegramBot _telegramApi;
         public string ErrorMessage { get; }
 
-        public BadCommandFormatResponse(TelegramCallbackQuery callbackQuery, TelegramBot telegramApi, string errorMessage)
+        public BadCommandFormatResponse(TelegramFrom @from, TelegramBot telegramApi, string errorMessage)
         {
-            _callbackQuery = callbackQuery;
+            _from = @from;
             _telegramApi = telegramApi;
             ErrorMessage = errorMessage;
         }
@@ -26,7 +26,7 @@ namespace HappyDarioBot
 
         public async Task SendBackReplay()
         {
-            await _telegramApi.SendMessage(_callbackQuery.From.Id, ErrorMessage);
+            await _telegramApi.SendMessage(_from.Id, ErrorMessage);
         }
     }
 }

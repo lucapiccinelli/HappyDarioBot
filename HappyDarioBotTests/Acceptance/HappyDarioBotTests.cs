@@ -26,7 +26,7 @@ namespace HappyDarioBotTests.Acceptance
         private const String DarioSetNameCommandRequest =
             "{\"update_id\":26554043,\r\n\"message\":{\"message_id\":202,\"from\":{\"id\":494523457,\"is_bot\":false,\"first_name\":\"Luca\",\"last_name\":\"Piccinelli\",\"language_code\":\"it\"},\"chat\":{\"id\":494523457,\"first_name\":\"Luca\",\"last_name\":\"Piccinelli\",\"type\":\"private\"},\"date\":1566711316,\"text\":\"/setname\",\"entities\":[{\"offset\":0,\"length\":8,\"type\":\"bot_command\"}]}}";
 
-        
+
         [Theory]
         [InlineData(DarioTextRequest)]
         [InlineData(DarioSetNameCallbackRequest)]

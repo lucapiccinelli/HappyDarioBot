@@ -285,6 +285,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\Audio.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Gesù.aac">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -9,13 +9,13 @@ namespace HappyDarioBot
     {
         private readonly TelegramBot _telegramApi;
         private readonly IDarioBotRepository _repository;
-        private readonly TelegramCallbackQuery _callbackQuery;
+        private readonly TelegramFrom _from;
 
-        public SetNameDarioBotResponse(TelegramBot telegramApi, IDarioBotRepository repository, TelegramCallbackQuery callbackQuery, string name)
+        public SetNameDarioBotResponse(TelegramBot telegramApi, IDarioBotRepository repository, TelegramFrom @from, string name)
         {
             _telegramApi = telegramApi;
             _repository = repository;
-            _callbackQuery = callbackQuery;
+            _from = @from;
             Name = name;
         }
 
@@ -30,9 +30,9 @@ namespace HappyDarioBot
 
         public async Task SendBackReplay()
         {
-            await _repository.SetCurrentAudioName(Name, 
-                async () => await _telegramApi.SendMessage(_callbackQuery.From.Id, "ok"),
-                async error => await _telegramApi.SendMessage(_callbackQuery.From.Id, error.Message));
+            _repository.SetCurrentAudioName(Name, 
+                async () => await _telegramApi.SendMessage(_from.Id, "ok"),
+                async error => await _telegramApi.SendMessage(_from.Id, error.Message));
         }
     }
 }

@@ -10,5 +10,6 @@ namespace HappyDarioBot.Dto.Webhook.In
         public TelegramChat Chat { get; set; }
         public int Date { get; set; }
         public string Text { get; set; }
+        public TelegramVoice Voice { get; set; }
     }
 }
