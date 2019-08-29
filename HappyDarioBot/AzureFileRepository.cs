@@ -52,7 +52,6 @@ namespace HappyDarioBot
             Try(() =>
             {
                 CloudBlobContainer container = GetContainer();
-                container.CreateIfNotExists(BlobContainerPublicAccessType.Off);
                 CloudBlockBlob blob = container.GetBlockBlobReference(CurrentnameFile);
 
                 blob.UploadText(name);
@@ -73,6 +72,22 @@ namespace HappyDarioBot
                 onSuccess(saveFilename);
             }, onError);
         }
+
+        public void PushInWaitingList(int fromId, string name)
+        {
+            CloudBlobContainer container = GetContainer();
+            CloudBlockBlob blob = container.GetBlockBlobReference(name);
+
+            string waitingList = "";
+            if (blob.Exists())
+            {
+                waitingList = $"{blob.DownloadText()},";
+            }
+            waitingList = $"{waitingList}name";
+
+            blob.UploadText(waitingList);
+        }
+
         public void Try(Action action, Action<RepositoryError> onError)
         {
             try
@@ -96,10 +111,10 @@ namespace HappyDarioBot
             return currentname.DownloadText();
         }
 
-        public async Task Clean()
+        public void Clean()
         {
             var container = GetContainer();
-            await container.DeleteIfExistsAsync();
+            container.DeleteIfExists();
         }
 
         private CloudBlobContainer GetContainer()
@@ -107,6 +122,7 @@ namespace HappyDarioBot
             var storageAccount = CloudStorageAccount.Parse(_connectionString);
             CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
             CloudBlobContainer container = blobClient.GetContainerReference(_repositoryReference);
+            container.CreateIfNotExists(BlobContainerPublicAccessType.Off);
             return container;
         }
 

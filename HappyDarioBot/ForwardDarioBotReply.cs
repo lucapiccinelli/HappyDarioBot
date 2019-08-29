@@ -6,6 +6,7 @@ namespace HappyDarioBot
     public class ForwardDarioBotReply : IDarioBotReply
     {
         private readonly TelegramBot _telegramApi;
+        private readonly IDarioBotRepository _repository;
         public string ToReplyMessage { get; }
         public string FromReplyMessage { get; }
         public int FromId { get; }
@@ -13,7 +14,8 @@ namespace HappyDarioBot
         public string Name { get; }
 
         public ForwardDarioBotReply(
-            TelegramBot telegramApi, 
+            TelegramBot telegramApi,
+            IDarioBotRepository repository,
             string fromReplyMessage, 
             string toReplyMessage, 
             int fromId, 
@@ -21,6 +23,7 @@ namespace HappyDarioBot
             string name)
         {
             _telegramApi = telegramApi;
+            _repository = repository;
             ToReplyMessage = toReplyMessage;
             FromReplyMessage = fromReplyMessage;
             FromId = fromId;
@@ -38,6 +41,7 @@ namespace HappyDarioBot
         {
             await _telegramApi.SendMessage(FromId, FromReplyMessage);
             await _telegramApi.SendInlineKeyboard(ForwardedToId, ToReplyMessage, Name);
+            _repository.PushInWaitingList(FromId, Name);
         }
     }
 }

@@ -35,5 +35,10 @@ namespace HappyDarioBot
         {
             throw new NotImplementedException();
         }
+
+        public void PushInWaitingList(int fromId, string name)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

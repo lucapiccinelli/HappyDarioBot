@@ -72,5 +72,11 @@ namespace HappyDarioBotTests.Integration
             _badAzureFileRepository.Save(filetoUpload, _ => { }, error => message = error.Message);
             Assert.NotEmpty(message);
         }
+
+        [Fact]
+        public void Can_Push_InWaitingList()
+        {
+            _azureFileRepository.PushInWaitingList(123456789, "Luca");
+        }
     }
 }

@@ -34,8 +34,10 @@ namespace HappyDarioBot
         public async Task SendBackReplay()
         {
             byte[] uploadedFile = await _telegramApi.Download(_messageVoice.fileId);
-             _repository.Save(uploadedFile, async savedTo => await _telegramApi.SendMessage(_from.Id, $"ok: saved to {savedTo}"),
-                (_) => { });
+             _repository.Save(
+                 uploadedFile, 
+                 async savedTo => await _telegramApi.SendMessage(_from.Id, $"ok: saved to {savedTo}"),
+                 async error => await _telegramApi.SendMessage(_from.Id, $"error: {error.Message}"));
         }
     }
 }

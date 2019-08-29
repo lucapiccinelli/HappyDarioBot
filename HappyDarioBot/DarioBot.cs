@@ -118,7 +118,7 @@ namespace HappyDarioBot
 
             var name = telegramMsg.Text;
             string toReplyMessage = $"Dario, fammi un audio per {name}";
-            return new ForwardDarioBotReply(_telegramApi, fromReplyMessage, toReplyMessage, fromId, _forwardId, name);
+            return new ForwardDarioBotReply(_telegramApi, _repository, fromReplyMessage, toReplyMessage, fromId, _forwardId, name);
         }
 
         private IDarioBotReply ReplyWithAudio(TelegramMessage telegramMsg, byte[] fileBytes)
