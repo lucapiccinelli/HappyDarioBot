@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -37,6 +38,11 @@ namespace HappyDarioBot
         }
 
         public void PushInWaitingList(int fromId, string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<int> GetWaitingList()
         {
             throw new NotImplementedException();
         }

@@ -266,6 +266,7 @@
     <Compile Include="TestFactory.cs" />
     <Compile Include="Unit\DarioBotTests.cs" />
     <Compile Include="Unit\NameMatcherTests.cs" />
+    <Compile Include="Unit\StringNormalizerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

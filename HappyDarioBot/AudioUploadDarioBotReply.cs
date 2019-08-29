@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using HappyDarioBot.Dto;
 using HappyDarioBot.Dto.Webhook.In;
@@ -38,6 +40,15 @@ namespace HappyDarioBot
                  uploadedFile, 
                  async savedTo => await _telegramApi.SendMessage(_from.Id, $"ok: saved to {savedTo}"),
                  async error => await _telegramApi.SendMessage(_from.Id, $"error: {error.Message}"));
+            List<int> waitingList = _repository.GetWaitingList();
+
+            using (MemoryStream ms = new MemoryStream(uploadedFile))
+            {
+                foreach (var telegramId in waitingList)
+                {
+                    await _telegramApi.SendAudioMessage(telegramId, ms);
+                }
+            }
         }
     }
 }

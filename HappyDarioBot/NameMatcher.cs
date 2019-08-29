@@ -9,10 +9,12 @@ namespace HappyDarioBot
     public class NameMatcher
     {
         private readonly string[] _namesList;
+        private readonly StringNormalizer _stringNormalizer;
 
         public NameMatcher(string[] namesList)
         {
             _namesList = namesList;
+            _stringNormalizer = new StringNormalizer();
         }
 
         public String Match(string name)
@@ -26,12 +28,6 @@ namespace HappyDarioBot
         }
 
         private string Normalize(string nameInList) => 
-            Path.GetFileNameWithoutExtension(RemoveDiacritics(nameInList));
-
-        string RemoveDiacritics(string text) => 
-            string.Concat(
-                text.Normalize(NormalizationForm.FormD)
-                    .Where(ch => CharUnicodeInfo.GetUnicodeCategory(ch) != UnicodeCategory.NonSpacingMark)
-            ).Normalize(NormalizationForm.FormC);
+            Path.GetFileNameWithoutExtension(_stringNormalizer.Normalize(nameInList));
     }
 }

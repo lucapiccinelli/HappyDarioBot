@@ -76,7 +76,36 @@ namespace HappyDarioBotTests.Integration
         [Fact]
         public void Can_Push_InWaitingList()
         {
-            _azureFileRepository.PushInWaitingList(123456789, "Luca");
+            _azureFileRepository.PushInWaitingList(494523457, "Luca");
+        }
+
+        [Fact]
+        public void Can_Create_And_Retrieve_WaitingList()
+        {
+            int id1 = 123456789;
+            int id2 = 00000;
+            List<int> expectedWaitingList = new List<int> { id1,  id2 };
+
+            _azureFileRepository.SetCurrentAudioName("bananà", () => { }, error => { });
+            _azureFileRepository.ClearWaitingList("Banana");
+
+            _azureFileRepository.PushInWaitingList(id1, "Banana");
+            _azureFileRepository.PushInWaitingList(id2, "banana");
+
+            List<int> waitingList = _azureFileRepository.GetWaitingList();
+            Assert.Equal(expectedWaitingList, waitingList);
+        }
+
+        [Fact]
+        public void GetAn_EmptyWatingList_IfNoOne_IsWaiting()
+        {
+            List<int> expectedWaitingList = new List<int>();
+
+            _azureFileRepository.SetCurrentAudioName("Banana", () => { }, error => { });
+            _azureFileRepository.ClearWaitingList("Banana");
+
+            List<int> waitingList = _azureFileRepository.GetWaitingList();
+            Assert.Equal(expectedWaitingList, waitingList);
         }
     }
 }

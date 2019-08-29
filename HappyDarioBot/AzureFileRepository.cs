@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -12,17 +13,20 @@ namespace HappyDarioBot
     public class AzureFileRepository : IDarioBotRepository
     {
         private const string CurrentnameFile = "currentname";
+        private const char WaitingListSeparator = ',';
 
 
         private readonly string _connectionString;
         private readonly string _resourcePath;
         private readonly string _repositoryReference;
+        private readonly StringNormalizer _stringNormalizer;
 
         public AzureFileRepository(string connectionString, string resourcePath, string repositoryReference = "happydariobot")
         {
             _connectionString = connectionString;
             _resourcePath = resourcePath;
             _repositoryReference = repositoryReference;
+            _stringNormalizer = new StringNormalizer();
         }
 
         public T HasAnAudio<T>(string name, Func<byte[], T> onExists, Func<T> onNotExists)
@@ -75,17 +79,50 @@ namespace HappyDarioBot
 
         public void PushInWaitingList(int fromId, string name)
         {
-            CloudBlobContainer container = GetContainer();
-            CloudBlockBlob blob = container.GetBlockBlobReference(name);
+            CloudBlockBlob blob = GetBlobFor(name);
 
             string waitingList = "";
             if (blob.Exists())
             {
-                waitingList = $"{blob.DownloadText()},";
+                waitingList = $"{blob.DownloadText()}{WaitingListSeparator}";
             }
-            waitingList = $"{waitingList}name";
+            waitingList = $"{waitingList}{fromId}";
 
             blob.UploadText(waitingList);
+        }
+
+        public void ClearWaitingList(string name)
+        {
+            CloudBlockBlob blob = GetBlobFor(name);
+            blob.DeleteIfExists();
+        }
+
+        public List<int> GetWaitingList()
+        {
+            string currentnameFile = GetFilename();
+            CloudBlockBlob waitingListBlob = GetBlobFor(currentnameFile);
+
+            if (!waitingListBlob.Exists())
+            {
+                return new List<int>();
+            }
+
+            string waitingListString = waitingListBlob.DownloadText();
+            List<int> waitingList =  waitingListString.Split(WaitingListSeparator)
+                .Select(int.Parse)
+                .ToList();
+
+
+            waitingListBlob.DeleteIfExists();
+            return waitingList;
+        }
+
+        private CloudBlockBlob GetBlobFor(string name)
+        {
+            string normalizedName = _stringNormalizer.Normalize(name);
+            CloudBlobContainer container = GetContainer();
+            CloudBlockBlob blob = container.GetBlockBlobReference(normalizedName);
+            return blob;
         }
 
         public void Try(Action action, Action<RepositoryError> onError)

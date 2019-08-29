@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace HappyDarioBot
@@ -9,5 +10,6 @@ namespace HappyDarioBot
         void SetCurrentAudioName(string name, Action onSuccess, Action<RepositoryError> onError);
         void Save(byte[] uploadedFile, Action<string> onSuccess, Action<RepositoryError> onError);
         void PushInWaitingList(int fromId, string name);
+        List<int> GetWaitingList();
     }
 }
