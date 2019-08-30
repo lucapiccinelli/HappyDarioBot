@@ -26,18 +26,33 @@ namespace HappyDarioBotTests.Acceptance
         private const String DarioSetNameCommandRequest =
             "{\"update_id\":26554043,\r\n\"message\":{\"message_id\":202,\"from\":{\"id\":494523457,\"is_bot\":false,\"first_name\":\"Luca\",\"last_name\":\"Piccinelli\",\"language_code\":\"it\"},\"chat\":{\"id\":494523457,\"first_name\":\"Luca\",\"last_name\":\"Piccinelli\",\"type\":\"private\"},\"date\":1566711316,\"text\":\"/setname\",\"entities\":[{\"offset\":0,\"length\":8,\"type\":\"bot_command\"}]}}";
 
+        private const String BadFormatRequest =
+            "{\"message\":\"ciao\"}";
+
 
         [Theory]
-        [InlineData(DarioTextRequest)]
-        [InlineData(DarioSetNameCallbackRequest)]
-        [InlineData(DarioSetNameCommandRequest)]
-        [InlineData(DarioAudioUploadRequest)]
-        public async void DarioBotCanHandleSetnameCommand(string darioRequest)
+        [InlineData(DarioTextRequest, HttpStatusCode.OK)]
+        [InlineData(DarioSetNameCallbackRequest, HttpStatusCode.OK)]
+        [InlineData(DarioSetNameCommandRequest, HttpStatusCode.OK)]
+        [InlineData(DarioAudioUploadRequest, HttpStatusCode.OK)]
+        public async void DarioBotCanHandleRequests(string darioRequest, HttpStatusCode expectedStatus)
         {
             var request = CreateRequest(out var logger, JsonConvert.DeserializeObject<TelegramUpdate>(darioRequest));
 
             var response = await HappyDarioBot.HappyDarioBot.Run(request, logger);
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Equal(expectedStatus, response.StatusCode);
+        }
+
+        [Fact]
+        public async void DarioBotCanBadFormatRequest()
+        {
+            var request = TestFactory.CreateHttpRequest(HttpMethod.Post, "");
+            var logger = TestFactory.CreateLogger();
+
+            request.Content = new StringContent(BadFormatRequest);
+
+            var response = await HappyDarioBot.HappyDarioBot.Run(request, logger);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
         private static HttpRequestMessage CreateRequest(out ILogger logger, TelegramUpdate requestPayload)
