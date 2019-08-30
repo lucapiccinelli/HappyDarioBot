@@ -9,5 +9,6 @@ namespace HappyDarioBot
         void Use(BadCommandFormatResponse reply);
         void Use(UnknownCommand reply);
         void Use(AudioUploadDarioBotReply reply);
+        void Use(WelcomeDarioBotResponse reply);
     }
 }

@@ -71,10 +71,6 @@ namespace HappyDarioBot
         private IDarioBotReply HandleCommand(string commandData, TelegramFrom @from)
         {
             string[] commandTokens = GetCommandTokens(commandData);
-            if (commandTokens.Length != 2)
-            {
-                return new BadCommandFormatResponse(@from, _telegramApi, $"Expected at least 1 command and 1 argument. Received: {commandData}");
-            }
 
             string theCommand = commandTokens.First();
             if (!IsACommand(theCommand))
@@ -95,12 +91,21 @@ namespace HappyDarioBot
         {
             if (command == TelegramBotConstants.SetNameCommand)
             {
+                if (args.Length != 1)
+                {
+                    return new BadCommandFormatResponse(@from, _telegramApi, $"Expected at least 1 command and 1 argument. Received: {args}");
+                }
+
                 if (from.Id != _forwardId)
                 {
                     return new PrivateCommandDarioBotResponse(from, _telegramApi);
                 }
 
                 return new SetNameDarioBotResponse(_telegramApi, _repository, from, args.First());
+            }
+            else if (command == TelegramBotConstants.StartCommand)
+            {
+                return new WelcomeDarioBotResponse(_telegramApi, from);
             }
 
             return new UnknownCommand($"Not a known command: {command}, args: {args}");

@@ -7,6 +7,7 @@
         Ok,
         Ko,
         UnknownCommand,
-        BadCommand
+        BadCommand,
+        Welcome
     }
 }

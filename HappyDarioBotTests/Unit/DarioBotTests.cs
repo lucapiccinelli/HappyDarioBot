@@ -19,6 +19,8 @@ namespace HappyDarioBotTests.Unit
         private const int MyId = 494523457;
         private const string MyName = "Luca";
         private const int UnknownId = 1235456789;
+        private const int AnyoneId = 987654321;
+
 
 
         public DarioBotTests()
@@ -93,6 +95,7 @@ namespace HappyDarioBotTests.Unit
             Assert.Equal(DarioBotReplyEnum.Ok, reply.Type);
             reply.ApplyTo(this);
         }
+
         [Fact]
         public void DarioBot_AnswersOk_IfForwardId_Asks_ToSet_AName_FromAMessage()
         {
@@ -134,7 +137,7 @@ namespace HappyDarioBotTests.Unit
 
         [Theory]
         [InlineData("/unknown command", DarioBotReplyEnum.UnknownCommand)]
-        [InlineData("/unknown", DarioBotReplyEnum.BadCommand)]
+        [InlineData("/setname", DarioBotReplyEnum.BadCommand)]
         [InlineData("unknown command", DarioBotReplyEnum.BadCommand)]
         [InlineData("unknown", DarioBotReplyEnum.BadCommand)]
         public void DarioBot_AnswersKo_IfCallBackCommand_IsUnknown(string command, DarioBotReplyEnum expectedReply)
@@ -152,6 +155,25 @@ namespace HappyDarioBotTests.Unit
             });
 
             Assert.Equal(expectedReply, reply.Type);
+        }
+
+        [Fact]
+        public void DarioBot_AnswersWelcome_ToStartCommand()
+        {
+            IDarioBotReply reply = _darioBot.ReplyBack(new TelegramUpdate
+            {
+                Message = new TelegramMessage()
+                {
+                    From = new TelegramFrom()
+                    {
+                        Id = AnyoneId
+                    },
+                    Text = $"{TelegramBotConstants.StartCommand}"
+                }
+            });
+
+
+            Assert.Equal(DarioBotReplyEnum.Welcome, reply.Type);
         }
 
         [Fact]
@@ -218,6 +240,11 @@ namespace HappyDarioBotTests.Unit
         }
 
         public void Use(AudioUploadDarioBotReply reply)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Use(WelcomeDarioBotResponse reply)
         {
             throw new NotImplementedException();
         }
