@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using RestSharp;
 using RestSharp.Extensions;
 using TelegramBotApi.Dto;
@@ -31,19 +32,20 @@ namespace TelegramBotApi
             request.AddJsonBody(new 
             {
                 chat_id = fromId,
-                text = message,
+                text = ParseMessage(message),
                 parse_mode = "HTML"
             });
 
             await SendRequestOrThrow(request);
         }
+
         public async Task SendInlineKeyboard(int fromId, string message, string buttonText)
         {
             RestRequest request = new RestRequest("sendMessage");
             request.AddJsonBody(new 
             {
                 chat_id = fromId,
-                text = message,
+                text = ParseMessage(message),
                 parse_mode = "HTML",
                 reply_markup = new 
                 {
@@ -53,7 +55,7 @@ namespace TelegramBotApi
                         {
                             new
                             {
-                                text = buttonText,
+                                text = ParseMessage(buttonText),
                                 callback_data = $"{TelegramBotConstants.SetNameCommand} {buttonText}"
                             }
 
@@ -96,6 +98,11 @@ namespace TelegramBotApi
         private async Task<IRestResponse<TelegramApiResponse>> SendRequestOrThrow(RestRequest request, Method httpMethod = Method.POST)
         {
             return await SendRequestOrThrow(request, _telegramBotClient, httpMethod);
+        }
+
+        private static string ParseMessage(string message)
+        {
+            return HttpUtility.HtmlEncode(message);
         }
 
         private async Task<IRestResponse<TelegramApiResponse>> SendRequestOrThrow(RestRequest request, RestClient client, Method httpMethod = Method.POST)

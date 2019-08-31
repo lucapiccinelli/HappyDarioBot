@@ -30,6 +30,15 @@ namespace HappyDarioBotTests.Integration
             await _telegramBot.SendMessage(MyId, "ciao!");
         }
 
+        [Theory]
+        [InlineData("<text>")]
+        [InlineData("&text")]
+        [InlineData("$text")]
+        public async void CanSend_Text_WithSpecialCharacters(string text)
+        {
+            await _telegramBot.SendMessage(MyId, text);
+        }
+
         [Fact]
         public async void CanSend_InlineKeyobord()
         {

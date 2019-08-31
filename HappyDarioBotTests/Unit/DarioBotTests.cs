@@ -212,6 +212,23 @@ namespace HappyDarioBotTests.Unit
             Assert.Equal(DarioBotReplyEnum.Ko, reply.Type);
         }
 
+        [Fact]
+        public void DarioBot_AnswersBadFormat_WhenTextIsNull()
+        {
+            IDarioBotReply reply = _darioBot.ReplyBack(new TelegramUpdate
+            {
+                Message = new TelegramMessage
+                {
+                    From = new TelegramFrom()
+                    {
+                        Id = UnknownId
+                    }
+                }
+            });
+
+            Assert.Equal(DarioBotReplyEnum.UnhandledInput, reply.Type);
+        }
+
         public void Use(ForwardDarioBotReply reply)
         {
             Assert.Equal(MyId, reply.FromId);
@@ -245,6 +262,11 @@ namespace HappyDarioBotTests.Unit
         }
 
         public void Use(WelcomeDarioBotResponse reply)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Use(UnhandledInput reply)
         {
             throw new NotImplementedException();
         }

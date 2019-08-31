@@ -8,6 +8,7 @@
         Ko,
         UnknownCommand,
         BadCommand,
-        Welcome
+        Welcome,
+        UnhandledInput
     }
 }

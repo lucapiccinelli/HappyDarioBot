@@ -38,6 +38,11 @@ namespace HappyDarioBot
                     return ReplyFor(message.From, message.Voice);
                 }
 
+                if (message.Text == null)
+                {
+                    return new UnhandledInput(_telegramApi, _repository, message.From);
+                }
+
                 return ReplyFor(message);
             }
         }

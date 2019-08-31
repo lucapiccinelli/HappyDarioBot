@@ -26,6 +26,9 @@ namespace HappyDarioBotTests.Acceptance
         private const String DarioSetNameCommandRequest =
             "{\"update_id\":26554043,\r\n\"message\":{\"message_id\":202,\"from\":{\"id\":494523457,\"is_bot\":false,\"first_name\":\"Luca\",\"last_name\":\"Piccinelli\",\"language_code\":\"it\"},\"chat\":{\"id\":494523457,\"first_name\":\"Luca\",\"last_name\":\"Piccinelli\",\"type\":\"private\"},\"date\":1566711316,\"text\":\"/setname\",\"entities\":[{\"offset\":0,\"length\":8,\"type\":\"bot_command\"}]}}";
 
+        private const String DarioVideoUploadRequest =
+            "{\"update_id\":26554087,\r\n\"message\":{\"message_id\":667,\"from\":{\"id\":494523457,\"is_bot\":false,\"first_name\":\"Antonio\",\"last_name\":\"Donato\",\"language_code\":\"it\"},\"chat\":{\"id\":10837856,\"first_name\":\"Antonio\",\"last_name\":\"Donato\",\"type\":\"private\"},\"date\":1567195941,\"video_note\":{\"duration\":6,\"length\":240,\"thumb\":{\"file_id\":\"AAQEAAOmBAACZMlJU_3NdF83lvbKkPqeGwAEAQAHbQAD2SsAAhYE\",\"file_size\":4676,\"width\":240,\"height\":240},\"file_id\":\"DQADBAADpgQAAmTJSVP9zXRfN5b2yhYE\",\"file_size\":282021}}}";
+
         private const String BadFormatRequest =
             "{\"message\":\"ciao\"}";
 
@@ -43,16 +46,18 @@ namespace HappyDarioBotTests.Acceptance
             Assert.Equal(expectedStatus, response.StatusCode);
         }
 
-        [Fact]
-        public async void DarioBotCanBadFormatRequest()
+        [Theory]
+        [InlineData(DarioVideoUploadRequest, HttpStatusCode.OK)]
+        [InlineData(BadFormatRequest, HttpStatusCode.BadRequest)]
+        public async void DarioBotCanHandleBadFormatRequest(string darioRequest, HttpStatusCode expectedStatus)
         {
             var request = TestFactory.CreateHttpRequest(HttpMethod.Post, "");
             var logger = TestFactory.CreateLogger();
 
-            request.Content = new StringContent(BadFormatRequest);
+            request.Content = new StringContent(darioRequest);
 
             var response = await HappyDarioBot.HappyDarioBot.Run(request, logger);
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Equal(expectedStatus, response.StatusCode);
         }
 
         private static HttpRequestMessage CreateRequest(out ILogger logger, TelegramUpdate requestPayload)
