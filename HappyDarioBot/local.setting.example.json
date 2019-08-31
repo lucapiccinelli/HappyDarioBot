@@ -1,0 +1,14 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "", //leave empty
+    "AzureWebJobsDashboard": "", //leave empty
+    "BotToken": "000000000:AAAAAA_BBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+    "ForwardToId": "000000000",
+    "ResourcesPath": "pathToYourLocalResources",
+    "RemoteResourcesPath": "path/to/your/remote/resources",
+    "AzureStorageName": "happydariobottests",
+    "LogToId": "000000000",
+    "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING": "AzureStorageConnectionString"
+  }
+}
