@@ -10,7 +10,7 @@ You will receive your personalized greetings audio.
 # Getting started with repo
 HappyDarioBot is implemented as an Azure function.
 
-In order to get started with repo, you will need 
+Integration and acceptance tests uses real remote Azure storage and telegram API, so in order to get started with repo, you will need 
  * An Azure account
  * An Azure storage
  * A Telegram bot (https://core.telegram.org/bots#botfather)
