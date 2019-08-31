@@ -32,3 +32,7 @@ Then you have to create all of the local.setting.json keys in the application co
 
  - click on configuration <img src=https://github.com/lucapiccinelli/HappyDarioBot/blob/master/Docs/assets/configuration.png width=1000px />
  - edit the entries <img src=https://github.com/lucapiccinelli/HappyDarioBot/blob/master/Docs/assets/configuration2.png width=1000px />
+ 
+# Make HappyDarioBot Azure function receive telegram updates
+Azure function is wired to Telegram via webhook. In order to make it receive updates, send a
+GET https://api.telegram.org/bot{my_bot_token}/setWebhook?url={url_to_send_updates_to}
