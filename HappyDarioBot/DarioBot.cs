@@ -123,7 +123,7 @@ namespace HappyDarioBot
 
         private IDarioBotReply ReplyWithForwarded(TelegramMessage telegramMsg)
         {
-            var fromReplyMessage = "Tiocanta!!! Non ti conosco zio! Aspetta che ti faccio l'audio";
+            var fromReplyMessage = "Tiocanta!!! Non ti conosco zio! Aspetta che ti faccio l'audio. Sta calmo che arriva";
             var fromId = telegramMsg.From.Id;
 
             var name = telegramMsg.Text;

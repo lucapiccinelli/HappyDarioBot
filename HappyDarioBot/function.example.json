@@ -5,17 +5,13 @@
       "name": "req",
       "direction": "in",
       "webHookType": "genericJson",
-      //"methods": [
-      //  "get"
-      //],
       "route": "api/banana/HappyDarioBot"
+    },
+    {
+      "type": "http",
+      "name": "$return",
+      "direction": "out"
     }
-
-    //{
-    //  "name": "$return",
-    //  "type": "http",
-    //  "direction": "out"
-    //}
   ],
   "disabled": false,
   "scriptFile": "..\\bin\\HappyDarioBot.dll",

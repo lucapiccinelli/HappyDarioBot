@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using Newtonsoft.Json;
 using System.Net.Http;
@@ -17,8 +19,15 @@ namespace HappyDarioBot
     {
         private static ILogger _log = null;
         private static TelegramBot _telegramClient;
-        private static int _logToId;
         private static TelegramUpdate _telegramUpdate;
+        private static readonly List<string> MonitorReportList;
+        private static int _logToId;
+
+        static HappyDarioBot()
+        {
+            MonitorReportList = new List<string>();
+            _logToId = 0;
+        }
 
         [FunctionName("HappyDarioBot")]
         public static async Task<HttpResponseMessage> Run([HttpTrigger(WebHookType = "genericJson")]HttpRequestMessage req, ILogger log)
@@ -26,6 +35,7 @@ namespace HappyDarioBot
             _log = log;
             log.LogInformation("DarioBot was triggered!");
 
+            MonitorReportList.Clear();
             try
             {
                 string botToken = DarioBotConfiguration.Get(DarioBotConfiguration.BotTokenKey);
@@ -42,17 +52,19 @@ namespace HappyDarioBot
 
                 string toId = DarioBotConfiguration.Get(DarioBotConfiguration.ForwardToIdKey);
                 string resourcesPath = DarioBotConfiguration.Get(DarioBotConfiguration.RemoteResourcesPathKey);
-                string azureStorageConnectionString = DarioBotConfiguration.Get(DarioBotConfiguration.StorageConnectionStringKey);
+                string azureStorageConnectionString =
+                    DarioBotConfiguration.Get(DarioBotConfiguration.StorageConnectionStringKey);
                 string azureStorage = DarioBotConfiguration.Get(DarioBotConfiguration.AzureStorageNameKey);
                 log.LogInformation($"forwardId: {toId}");
 
                 DarioBot darioBot = new DarioBot(
-                    botToken, 
-                    toId, 
+                    botToken,
+                    toId,
                     new AzureFileRepository(azureStorageConnectionString, resourcesPath, azureStorage));
 
                 IDarioBotReply reply = darioBot.ReplyBack(_telegramUpdate);
-                LogMessage($"DarioBot reply to {telegramFrom?.FirstName} {telegramFrom?.LastName}. {message} --> {reply.Type}");
+                LogMessage(
+                    $"DarioBot reply to {telegramFrom?.FirstName} {telegramFrom?.LastName}. {message} --> {reply.Type}");
 
                 await reply.SendBackReplay();
                 LogMessage($"DarioBot replied with success");
@@ -69,25 +81,32 @@ namespace HappyDarioBot
                 LogError(e.StackTrace);
                 return req.CreateResponse(HttpStatusCode.InternalServerError);
             }
+            finally
+            {
+                SendReport();
+            }
 
             return req.CreateResponse(HttpStatusCode.OK);
         }
 
-        private static async void LogMessage(string message)
+        private static async void SendReport()
         {
-            _log.LogInformation(message);
-            if (_telegramClient != null)
+            if (_telegramClient != null && _logToId != 0)
             {
-                await _telegramClient.SendMessage(_logToId, $"{_telegramUpdate?.UpdateId.ToString() ?? "No ID"} --> {message}");
+                string report = string.Join(Environment.NewLine, MonitorReportList);
+                await _telegramClient.SendMessage(_logToId, report);
             }
         }
-        private static async void LogError(string message)
+
+        private static void LogMessage(string message)
+        {
+            _log.LogInformation(message);
+            MonitorReportList.Add($"{_telegramUpdate?.UpdateId.ToString() ?? "No ID"} --> {message}");
+        }
+        private static void LogError(string message)
         {
             _log.LogError(message);
-            if (_telegramClient != null)
-            {
-                await _telegramClient.SendMessage(_logToId, $"ERROR --> {message}");
-            }
+            MonitorReportList.Add($"{_telegramUpdate?.UpdateId.ToString() ?? "No ID"} --> ERROR!!! --> {message}");
         }
 
         private static TelegramFrom GetFrom(TelegramUpdate telegramMsg) =>

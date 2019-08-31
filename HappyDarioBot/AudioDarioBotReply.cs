@@ -28,6 +28,7 @@ namespace HappyDarioBot
             using (MemoryStream ms = new MemoryStream(_audioBytes))
             {
                 await _telegramApi.SendAudioMessage(_fromId, ms);
+                await _telegramApi.SendMessage(_fromId, "Auguri vecchio!!!");
             }
         }
     }
