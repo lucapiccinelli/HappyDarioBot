@@ -25,8 +25,10 @@ Edit **local.settings.example.json** and then rename it to local.settings.json. 
  * **ForwardToId**: This is the id of the Telegram user that receive request to register an Audio when it is missing
  * **LogToId**: This is the id of the Telegram user that monitors the bot
  * **WEBSITE_CONTENTAZUREFILECONNECTIONSTRING**: the connection string of the Azure storage account
- 
-If you want to deploy the bot, then you have to create all of these keys in the application configuration of the azure function:
+
+# Deploy on Azure
+If you want to deploy the bot, follow deploy instructions on azure tutorials or inside Visual Studio. 
+Then you have to create all of the local.setting.json keys in the application configuration of the azure function:
 
  - click on configuration <img src=https://github.com/lucapiccinelli/HappyDarioBot/blob/master/Docs/assets/configuration.png width=1000px />
  - edit the entries <img src=https://github.com/lucapiccinelli/HappyDarioBot/blob/master/Docs/assets/configuration2.png width=1000px />
