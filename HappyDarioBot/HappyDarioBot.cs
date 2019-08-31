@@ -18,6 +18,7 @@ namespace HappyDarioBot
         private static ILogger _log = null;
         private static TelegramBot _telegramClient;
         private static int _logToId;
+        private static TelegramUpdate _telegramUpdate;
 
         [FunctionName("HappyDarioBot")]
         public static async Task<HttpResponseMessage> Run([HttpTrigger(WebHookType = "genericJson")]HttpRequestMessage req, ILogger log)
@@ -33,12 +34,11 @@ namespace HappyDarioBot
 
                 string jsonContent = await req.Content.ReadAsStringAsync();
                 log.LogInformation(jsonContent);
-                TelegramUpdate telegramMsg = JsonConvert.DeserializeObject<TelegramUpdate>(jsonContent);
-                TelegramFrom telegramFrom = GetFrom(telegramMsg);
-                string message = GetMessage(telegramMsg);
+                _telegramUpdate = JsonConvert.DeserializeObject<TelegramUpdate>(jsonContent);
+                TelegramFrom telegramFrom = GetFrom(_telegramUpdate);
+                string message = GetMessage(_telegramUpdate);
 
                 LogMessage($"received message from {telegramFrom?.FirstName} {telegramFrom?.LastName}. {message}");
-
 
                 string toId = DarioBotConfiguration.Get(DarioBotConfiguration.ForwardToIdKey);
                 string resourcesPath = DarioBotConfiguration.Get(DarioBotConfiguration.RemoteResourcesPathKey);
@@ -51,7 +51,7 @@ namespace HappyDarioBot
                     toId, 
                     new AzureFileRepository(azureStorageConnectionString, resourcesPath, azureStorage));
 
-                IDarioBotReply reply = darioBot.ReplyBack(telegramMsg);
+                IDarioBotReply reply = darioBot.ReplyBack(_telegramUpdate);
                 LogMessage($"DarioBot reply to {telegramFrom?.FirstName} {telegramFrom?.LastName}. {message} --> {reply.Type}");
 
                 await reply.SendBackReplay();
@@ -78,7 +78,7 @@ namespace HappyDarioBot
             _log.LogInformation(message);
             if (_telegramClient != null)
             {
-                await _telegramClient.SendMessage(_logToId, message);
+                await _telegramClient.SendMessage(_logToId, $"{_telegramUpdate?.UpdateId.ToString() ?? "No ID"} --> {message}");
             }
         }
         private static async void LogError(string message)
