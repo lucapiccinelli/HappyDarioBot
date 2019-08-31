@@ -4,10 +4,14 @@
     <Platforms>AnyCPU;x86;x64</Platforms>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="function.example.json" />
     <None Remove="HappyDarioBot\function.json" />
     <None Remove="local.settings.json" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="function.example.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="HappyDarioBot\function.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
