@@ -14,6 +14,15 @@ namespace HappyDarioBotTests.Unit
         [InlineData("bananà", "banana")]
         [InlineData("Bananà", "banana")]
         [InlineData("BéNèNà", "benena")]
+        [InlineData("BÖNèNà", "bonena")]
+        [InlineData("bananÀ", "banana")]
+        [InlineData("fabry", "fabri")]
+        [InlineData("name?", "name")]
+        [InlineData("nam?e", "name")]
+        [InlineData("name!", "name")]
+        [InlineData("name#", "name")]
+        [InlineData(",name", "name")]
+        [InlineData(".name", "name")]
         public void Strings_AreNormalized_RemovingAllAccents_AndLowerCasing(string input, string expected)
         {
             StringNormalizer normalizer = new StringNormalizer();

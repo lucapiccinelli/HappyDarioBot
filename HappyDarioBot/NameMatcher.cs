@@ -27,7 +27,7 @@ namespace HappyDarioBot
                    ?? "";
         }
 
-        private string Normalize(string nameInList) => 
-            Path.GetFileNameWithoutExtension(_stringNormalizer.Normalize(nameInList));
+        private string Normalize(string nameInList) =>
+            _stringNormalizer.Normalize(Path.GetFileNameWithoutExtension(nameInList));
     }
 }
