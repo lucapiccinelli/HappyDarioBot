@@ -124,10 +124,11 @@ namespace HappyDarioBot
         private IDarioBotReply ReplyWithForwarded(TelegramMessage telegramMsg)
         {
             var fromReplyMessage = "Tiocanta!!! Non ti conosco zio! Aspetta che ti faccio l'audio. Sta calmo che arriva";
+            var @from = telegramMsg.From;
             var fromId = telegramMsg.From.Id;
 
             var name = telegramMsg.Text;
-            string toReplyMessage = $"Dario, fammi un audio per {name}";
+            string toReplyMessage = $"Dario, {@from.FirstName} {from.LastName} ha chiesto un audio per {name}. Grazie \U0001f618";
             return new ForwardDarioBotReply(_telegramApi, _repository, fromReplyMessage, toReplyMessage, fromId, _forwardId, name);
         }
 
