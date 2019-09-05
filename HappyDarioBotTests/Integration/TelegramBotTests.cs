@@ -42,7 +42,7 @@ namespace HappyDarioBotTests.Integration
         [Fact]
         public async void CanSend_InlineKeyobord()
         {
-            await _telegramBot.SendInlineKeyboard(MyId, "ciao!", "Luca");
+            await _telegramBot.SendInlineKeyboard(MyId, MyId, "ciao!", "Luca");
         }
 
         [Fact]

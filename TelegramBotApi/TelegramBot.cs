@@ -39,12 +39,12 @@ namespace TelegramBotApi
             await SendRequestOrThrow(request);
         }
 
-        public async Task SendInlineKeyboard(int fromId, string message, string buttonText)
+        public async Task SendInlineKeyboard(int fromId, int forwardId, string message, string buttonText)
         {
             RestRequest request = new RestRequest("sendMessage");
             request.AddJsonBody(new 
             {
-                chat_id = fromId,
+                chat_id = forwardId,
                 text = ParseMessage(message),
                 parse_mode = "HTML",
                 reply_markup = new 
