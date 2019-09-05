@@ -9,6 +9,7 @@
         UnknownCommand,
         BadCommand,
         Welcome,
-        UnhandledInput
+        UnhandledInput,
+        Ammazzotutti
     }
 }

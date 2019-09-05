@@ -96,9 +96,9 @@ namespace HappyDarioBot
         {
             if (command == TelegramBotConstants.SetNameCommand)
             {
-                if (args.Length != 1)
+                if (args.Length < 1)
                 {
-                    return new BadCommandFormatResponse(@from, _telegramApi, $"Expected at least 1 command and 1 argument. Received: {args}");
+                    return new BadCommandFormatResponse(@from, _telegramApi, $"Expected at least 1 command and 1 argument. Received: {ArgsToString(args)}");
                 }
 
                 if (from.Id != _forwardId)
@@ -112,9 +112,19 @@ namespace HappyDarioBot
             {
                 return new WelcomeDarioBotResponse(_telegramApi, from);
             }
+            else if (command == TelegramBotConstants.AmmazzoTuttiCommand)
+            {
+                if (args.Length != 1)
+                {
+                    return new BadCommandFormatResponse(@from, _telegramApi, $"Expected 1 command and 1 argument. Received: {ArgsToString(args)}");
+                }
+                return new AmmazzotuttiDarioBotResponse(_repository, _telegramApi, from, _forwardId, args.First());
+            }
 
-            return new UnknownCommand($"Not a known command: {command}, args: {args}");
+            return new UnknownCommand(from, _telegramApi, $"Not a known command: {command}, args: {args}");
         }
+
+        private string ArgsToString(string[] args) => args.Aggregate("", (acc, s) => $"{acc} {s}");
 
         private bool IsACommand(string commandText)
         {

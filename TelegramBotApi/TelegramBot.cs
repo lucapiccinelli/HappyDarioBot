@@ -57,7 +57,12 @@ namespace TelegramBotApi
                             {
                                 text = ParseMessage(buttonText),
                                 callback_data = $"{TelegramBotConstants.SetNameCommand} {buttonText}"
-                            }
+                            },
+                            new
+                            {
+                                text = ParseMessage("Sfancula"),
+                                callback_data = $"{TelegramBotConstants.AmmazzoTuttiCommand} {fromId}"
+                            },
 
                         }
                     }

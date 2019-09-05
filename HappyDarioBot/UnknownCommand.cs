@@ -1,15 +1,20 @@
 using System;
 using System.Threading.Tasks;
+using HappyDarioBot.Dto.Webhook.In;
 using TelegramBotApi;
 
 namespace HappyDarioBot
 {
     public class UnknownCommand : IDarioBotReply
     {
+        private readonly TelegramFrom _from;
+        private readonly TelegramBot _telegramApi;
         private readonly string _errorMessage;
 
-        public UnknownCommand(string errorMessage)
+        public UnknownCommand(TelegramFrom @from, TelegramBot telegramApi, string errorMessage)
         {
+            _from = @from;
+            _telegramApi = telegramApi;
             _errorMessage = errorMessage;
         }
 
@@ -19,9 +24,9 @@ namespace HappyDarioBot
             consumer.Use(this);
         }
 
-        public Task SendBackReplay()
+        public async Task SendBackReplay()
         {
-            throw new NotImplementedException();
+            await _telegramApi.SendMessage(_from.Id, _errorMessage);
         }
     }
 }

@@ -41,6 +41,7 @@ namespace HappyDarioBot
         {
             await _telegramApi.SendMessage(FromId, FromReplyMessage);
             await _telegramApi.SendInlineKeyboard(ForwardedToId, ToReplyMessage, Name);
+            await _telegramApi.SendInlineKeyboard(ForwardedToId, ToReplyMessage, Name);
             _repository.PushInWaitingList(FromId, Name);
         }
     }

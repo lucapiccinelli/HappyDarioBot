@@ -95,6 +95,44 @@ namespace HappyDarioBotTests.Unit
             Assert.Equal(DarioBotReplyEnum.Ok, reply.Type);
             reply.ApplyTo(this);
         }
+        [Fact]
+        public void DarioBot_AnswersOk_IfForwardId_Asks_ToSet_ANameWithSpaces_FromACallback()
+        {
+            IDarioBotReply reply = _darioBot.ReplyBack(new TelegramUpdate
+            {
+                CallbackQuery = new TelegramCallbackQuery()
+                {
+                    From = new TelegramFrom()
+                    {
+                        Id = MyId
+                    },
+                    Data = $"{TelegramBotConstants.SetNameCommand} {MyName} Piccinelli"
+                }
+            });
+
+
+            Assert.Equal(DarioBotReplyEnum.Ok, reply.Type);
+            reply.ApplyTo(this);
+        }
+
+        [Fact]
+        public void DarioBot_AnswersOk_IfForwardId_Asks_Ammazzotutti_FromACallback()
+        {
+            IDarioBotReply reply = _darioBot.ReplyBack(new TelegramUpdate
+            {
+                CallbackQuery = new TelegramCallbackQuery()
+                {
+                    From = new TelegramFrom()
+                    {
+                        Id = MyId
+                    },
+                    Data = $"{TelegramBotConstants.AmmazzoTuttiCommand} {MyId}"
+                }
+            });
+
+
+            Assert.Equal(DarioBotReplyEnum.Ammazzotutti, reply.Type);
+        }
 
         [Fact]
         public void DarioBot_AnswersOk_IfForwardId_Asks_ToSet_AName_FromAMessage()
@@ -138,6 +176,7 @@ namespace HappyDarioBotTests.Unit
         [Theory]
         [InlineData("/unknown command", DarioBotReplyEnum.UnknownCommand)]
         [InlineData("/setname", DarioBotReplyEnum.BadCommand)]
+        [InlineData("/ammazzotutti", DarioBotReplyEnum.BadCommand)]
         [InlineData("unknown command", DarioBotReplyEnum.BadCommand)]
         [InlineData("unknown", DarioBotReplyEnum.BadCommand)]
         public void DarioBot_AnswersKo_IfCallBackCommand_IsUnknown(string command, DarioBotReplyEnum expectedReply)
@@ -267,6 +306,11 @@ namespace HappyDarioBotTests.Unit
         }
 
         public void Use(UnhandledInput reply)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Use(AmmazzotuttiDarioBotResponse reply)
         {
             throw new NotImplementedException();
         }

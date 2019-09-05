@@ -21,7 +21,10 @@ namespace HappyDarioBotTests.Acceptance
             "{\"update_id\":26554033,\r\n\"message\":{\"message_id\":188,\"from\":{\"id\":494523457,\"is_bot\":false,\"first_name\":\"Luca\",\"last_name\":\"Piccinelli\",\"language_code\":\"en\"},\"chat\":{\"id\":494523457,\"first_name\":\"Luca\",\"last_name\":\"Piccinelli\",\"type\":\"private\"},\"date\":1566535682,\"voice\":{\"duration\":3,\"mime_type\":\"audio/ogg\",\"file_id\":\"AwADBAADbQYAAtQHAVMH6C2nlJBQnRYE\",\"file_size\":27277}}}";
 
         private const String DarioSetNameCallbackRequest =
-            "{\"update_id\":26554040,\r\n\"callback_query\":{\"id\":\"2123962075205558993\",\"from\":{\"id\":494523457,\"is_bot\":false,\"first_name\":\"Luca\",\"last_name\":\"Piccinelli\",\"language_code\":\"en\"},\"message\":{\"message_id\":191,\"from\":{\"id\":959082501,\"is_bot\":true,\"first_name\":\"DarioBot\",\"username\":\"HappyDarioBot\"},\"chat\":{\"id\":494523457,\"first_name\":\"Luca\",\"last_name\":\"Piccinelli\",\"type\":\"private\"},\"date\":1566536656,\"text\":\"Luca\",\"reply_markup\":{\"inline_keyboard\":[[{\"text\":\"Luca\",\"callback_data\":\"/setname Luca\"}]]}},\"chat_instance\":\"4166611704352923468\",\"data\":\"/setname Luca\"}}";
+            "{\"update_id\":26554040,\r\n\"callback_query\":{\"id\":\"2123962075205558993\",\"from\":{\"id\":494523457,\"is_bot\":false,\"first_name\":\"Luca\",\"last_name\":\"Piccinelli\",\"language_code\":\"en\"},\"message\":{\"message_id\":191,\"from\":{\"id\":959082501,\"is_bot\":true,\"first_name\":\"DarioBot\",\"username\":\"HappyDarioBot\"},\"chat\":{\"id\":494523457,\"first_name\":\"Luca\",\"last_name\":\"Piccinelli\",\"type\":\"private\"},\"date\":1566536656,\"text\":\"Luca\",\"reply_markup\":{\"inline_keyboard\":[[{\"text\":\"Luca\",\"callback_data\":\"/setname Luca\"}]]}},\"chat_instance\":\"4166611704352923468\",\"data\":\"/setname Luca Piccinelli\"}}";
+
+        private const String DarioAmmazzotuttiCallbackRequest =
+            "{\"update_id\":26554040,\r\n\"callback_query\":{\"id\":\"2123962075205558993\",\"from\":{\"id\":494523457,\"is_bot\":false,\"first_name\":\"Luca\",\"last_name\":\"Piccinelli\",\"language_code\":\"en\"},\"message\":{\"message_id\":191,\"from\":{\"id\":959082501,\"is_bot\":true,\"first_name\":\"DarioBot\",\"username\":\"HappyDarioBot\"},\"chat\":{\"id\":494523457,\"first_name\":\"Luca\",\"last_name\":\"Piccinelli\",\"type\":\"private\"},\"date\":1566536656,\"text\":\"Luca\",\"reply_markup\":{\"inline_keyboard\":[[{\"text\":\"Luca\",\"callback_data\":\"/ammazzotutti 494523457\"}]]}},\"chat_instance\":\"4166611704352923468\",\"data\":\"/ammazzotutti 494523457\"}}";
 
         private const String DarioSetNameCommandRequest =
             "{\"update_id\":26554043,\r\n\"message\":{\"message_id\":202,\"from\":{\"id\":494523457,\"is_bot\":false,\"first_name\":\"Luca\",\"last_name\":\"Piccinelli\",\"language_code\":\"it\"},\"chat\":{\"id\":494523457,\"first_name\":\"Luca\",\"last_name\":\"Piccinelli\",\"type\":\"private\"},\"date\":1566711316,\"text\":\"/setname\",\"entities\":[{\"offset\":0,\"length\":8,\"type\":\"bot_command\"}]}}";
@@ -38,6 +41,7 @@ namespace HappyDarioBotTests.Acceptance
         [InlineData(DarioSetNameCallbackRequest, HttpStatusCode.OK)]
         [InlineData(DarioSetNameCommandRequest, HttpStatusCode.OK)]
         [InlineData(DarioAudioUploadRequest, HttpStatusCode.OK)]
+        [InlineData(DarioAmmazzotuttiCallbackRequest, HttpStatusCode.OK)]
         public async void DarioBotCanHandleRequests(string darioRequest, HttpStatusCode expectedStatus)
         {
             var request = CreateRequest(out var logger, JsonConvert.DeserializeObject<TelegramUpdate>(darioRequest));

@@ -11,5 +11,6 @@ namespace HappyDarioBot
         void Use(AudioUploadDarioBotReply reply);
         void Use(WelcomeDarioBotResponse reply);
         void Use(UnhandledInput reply);
+        void Use(AmmazzotuttiDarioBotResponse reply);
     }
 }
