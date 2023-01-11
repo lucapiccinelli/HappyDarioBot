@@ -1,6 +1,9 @@
 # HappyDarioBot
 Get Happy birthday greetings from Dario! HappyDarioBot is working here https://telegram.me/HappyDarioBot
 
+## Related Article
+[Fast Prototyping with TDD and Azure Functions](https://betterprogramming.pub/fast-prototyping-with-azure-functions-6e0e24ef2bff?sk=1065ec1ec2a5143b818e44065958d607) (Medium friend link)
+
 # Introduction
 Dario is funny 😊. He gives great happy birthday greetings! So why don't let him greet everyone who would like to be greeted?
 
